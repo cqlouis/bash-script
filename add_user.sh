@@ -18,6 +18,9 @@ echo -n "Belong to group: "
 read group
 
 #此处需要判断是否已经存在该组
+
+cat /etc/group | awk -F ':' '{print $1}'
+
 if [ -n $group ]; then
 	
 	groupadd $group
