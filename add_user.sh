@@ -21,8 +21,11 @@ groupadd $group 2>/dev/null
 for username in `cat ./$user`
 do
 	if [ -n ${username} ]; then
-		useradd -m ${username} -c $comment -g $group  >> out.txt 2>&1 
-		echo "$username$suffix" | passwd --stdin $username >>out.txt 2>&1
+
+			useradd -m ${username} -c $comment -g $group  >> out.txt 2>&1 
+			echo 
+			echo "$username$suffix" | passwd --stdin $username >>out.txt 2>&1
+			echo
 	else
 		echo "user is null!"	
 	fi
