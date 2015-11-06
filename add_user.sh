@@ -16,21 +16,13 @@ echo -n "Some comments about this user: "
 read comment
 echo -n "Belong to group: "
 read group
-
-#此处需要判断是否已经存在该组
-if [ -n $group ]; then
-	
-	groupadd $group
-fi
+groupadd $group 2>/dev/null
 
 for username in `cat ./$user`
 do
 	if [ -n ${username} ]; then
-
-			useradd -m ${username} -c $comment -g $group  >> out.txt 2>&1 
-			echo 
-			echo "$username$suffix" | passwd --stdin $username >>out.txt 2>&1
-			echo
+		useradd -m ${username} -c $comment -g $group  >> out.txt 2>&1 
+		echo "$username$suffix" | passwd --stdin $username >>out.txt 2>&1
 	else
 		echo "user is null!"	
 	fi
