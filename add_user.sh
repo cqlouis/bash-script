@@ -18,15 +18,18 @@ echo -n "Belong to group: "
 read group
 groupadd $group 2>/dev/null
 
-for username in `cat ./$user`
-do
-	if [ -n ${username} ]; then
+if [ -s $user ]; then 
+
+	for username in `cat ./$user`
+	do
+		if [ -n ${username} ]; then
 
 			useradd -m ${username} -c $comment -g $group  >> out.txt 2>&1 
 			echo 
 			echo "$username$suffix" | passwd --stdin $username >>out.txt 2>&1
 			echo
-	else
-		echo "user is null!"	
-	fi
-done
+		fi
+	done
+else
+	echo "No data in file or file doesn't exist!"
+fi
