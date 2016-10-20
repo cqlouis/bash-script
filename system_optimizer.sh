@@ -1,5 +1,6 @@
 #!/bin/bash  
 
+#先对系统进行判断，如果是Cent OS 64位，就继续运行。
 platform=`uname -i`  
 
 if [ $platform != "x86_64" ];then 
@@ -51,7 +52,7 @@ cat>> /etc/security/limits.conf<< EOF
 *           hardnofile       65535  
 EOF  
 
-#set the control-alt-delete to guard against the miSUSE  
+#set the control-alt-delete to guard against the misUSE  
 sed -i 's#exec /sbin/shutdown -r now#\#exec /sbin/shutdown -r now#' /etc/init/control-alt-delete.conf  
 
 #disableselinux  
@@ -60,7 +61,7 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 #set ssh  
 sed -i 's/^GSSAPIAuthentication yes$/GSSAPIAuthentication no/' /etc/ssh/sshd_config  
 sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config  
-servicesshd restart  
+service sshd restart  
 
 #tune kernel parametres  
 cat>> /etc/sysctl.conf<< EOF  
@@ -81,6 +82,7 @@ net.ipv4.tcp_max_syn_backlog = 262144
 net.core.wmem_default = 8388608  
 net.core.rmem_default = 8388608  
 EOF  
+
 /sbin/sysctl -p  
 
 #define the backspace button can erase the last character typed  
@@ -91,15 +93,17 @@ echo "syntax on" >> /root/.vimrc
 mkdir /etc/cron.daily.bak  
 mv /etc/cron.daily/makewhatis.cron /etc/cron.daily.bak  
 mv /etc/cron.daily/mlocate.cron /etc/cron.daily.bak  
-chkconfigbluetooth off 
+chkconfig bluetooth off 
 chkconfig cups off 
 chkconfig ip6tables off 
+
 #disable the ipv6  
 cat> /etc/modprobe.d/ipv6.conf << EOFI  
 alias net-pf-10 off 
 options ipv6 disable=1  
 EOFI  
 echo "NETWORKING_IPV6=off" >> /etc/sysconfig/network  
+
 cat<< EOF  
 +-------------------------------------------------+  
 |               optimizer is done                 |  
